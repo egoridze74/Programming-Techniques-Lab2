@@ -22,20 +22,28 @@
  */
 std::vector<ZagsRecord> linear_search(const std::vector<ZagsRecord>& data, const std::string& target);
 
-// ==================== BST (бинарное дерево поиска) ====================
-struct BSTNode {
+// ==================== BinTree (бинарное дерево поиска) ====================
+struct BinTreeNode {
     ZagsRecord record;
-    std::unique_ptr<BSTNode> left;
-    std::unique_ptr<BSTNode> right;
-    BSTNode(const ZagsRecord& rec) : record(rec), left(nullptr), right(nullptr) {}
+    BinTreeNode* left;
+    BinTreeNode* right;
+    BinTreeNode(const ZagsRecord& rec) : record(rec), left(nullptr), right(nullptr) {}
 };
 
-class BST {
+class BinTree {
 private:
-    std::unique_ptr<BSTNode> root;
-    void insert(std::unique_ptr<BSTNode>& node, const ZagsRecord& rec);
-    void search_all(BSTNode* node, const std::string& target, std::vector<ZagsRecord>& result) const;
+    BinTreeNode* root;
+    void insert(BinTreeNode*& node, const ZagsRecord& rec);
+    void search_all(BinTreeNode* node, const std::string& target, std::vector<ZagsRecord>& result) const;
+    void clear(BinTreeNode* node);
+
 public:
+     BinTree() : root(nullptr) {}
+    ~BinTree() { clear(root); }
+    
+    BinTree(const BinTree&) = delete;
+    BinTree& operator=(const BinTree&) = delete;
+
     void insert(const ZagsRecord& rec);
     std::vector<ZagsRecord> search(const std::string& target) const;
     size_t size() const;
@@ -44,24 +52,33 @@ public:
 // ==================== Красно-черное дерево ====================
 enum class Color { RED, BLACK };
 
-struct RBTNode {
+struct RBTreeNode {
     ZagsRecord record;
     Color color;
-    std::unique_ptr<RBTNode> left;
-    std::unique_ptr<RBTNode> right;
-    RBTNode* parent;
-    RBTNode(const ZagsRecord& rec) 
+    RBTreeNode* left;
+    RBTreeNode* right;
+    RBTreeNode* parent;
+    RBTreeNode(const ZagsRecord& rec) 
         : record(rec), color(Color::RED), left(nullptr), right(nullptr), parent(nullptr) {}
 };
 
 class RedBlackTree {
 private:
-    std::unique_ptr<RBTNode> root;
-    void rotate_left(RBTNode* x);
-    void rotate_right(RBTNode* y);
-    void fix_insert(RBTNode* z);
-    void search_all(RBTNode* node, const std::string& target, std::vector<ZagsRecord>& result) const;
+    RBTreeNode* root;
+
+    void rotate_left(RBTreeNode* x);
+    void rotate_right(RBTreeNode* y);
+    void fix_insert(RBTreeNode* z);
+    void search_all(RBTreeNode* node, const std::string& target, std::vector<ZagsRecord>& result) const;
+    void clear(RBTreeNode* node);
+    
 public:
+    RedBlackTree() : root(nullptr) {}
+    ~RedBlackTree() { clear(root); }
+    
+    RedBlackTree(const RedBlackTree&) = delete;
+    RedBlackTree& operator=(const RedBlackTree&) = delete;
+
     void insert(const ZagsRecord& rec);
     std::vector<ZagsRecord> search(const std::string& target) const;
     size_t size() const;
@@ -81,12 +98,12 @@ size_t hash_string(const std::string& key, size_t table_size);
  */
 class HashTable {
 private:
-    std::vector<std::vector<ZagsRecord>> table;
     size_t collision_count;
     size_t total_inserts;
     
 public:
-    HashTable(size_t size = 10007); // простое число
+    std::vector<std::vector<ZagsRecord>> table;
+    HashTable(size_t size = 10007);
     void insert(const ZagsRecord& rec);
     std::vector<ZagsRecord> search(const std::string& target) const;
     double get_collision_rate() const;

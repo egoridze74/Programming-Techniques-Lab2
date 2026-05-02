@@ -14,6 +14,7 @@
 #include <random>
 #include <set>
 
+
 template<typename Func>
 double measure_search_time(Func search_func, int repeats = 5) {
     double total = 0.0;
@@ -30,10 +31,12 @@ double measure_search_time(Func search_func, int repeats = 5) {
 }
 
 int main() {
-    std::vector<size_t> sizes = {100, 500, 1000, 2000, 5000, 10000, 20000, 50000, 100000, 200000, 500000, 1000000};
+    setlocale(LC_ALL, "Russian");
+    
+    std::vector<size_t> sizes = {100, 200, 500, 1000, 2000, 5000, 10000, 20000, 50000, 100000, 200000, 500000, 1000000};
     
     std::ofstream results("search_times.csv");
-    results << "size,linear_ms,bst_ms,rbt_ms,hash_ms,multimap_ms,collision_rate\n";
+    results << "size,linear_ms,bintree_ms,rbtree_ms,hash_ms,multimap_ms,collision_rate\n";
     
     std::ofstream collisions_file("collisions.csv");
     collisions_file << "size,collision_rate\n";
@@ -61,17 +64,17 @@ int main() {
         double linear_time = measure_search_time(
             [&]() { return linear_search(data, target); }, 3);
         
-        // 2. BST
-        BST bst;
-        for (const auto& rec : data) bst.insert(rec);
-        double bst_time = measure_search_time(
-            [&]() { return bst.search(target); }, 3);
+        // 2. BinTree
+        BinTree bintree;
+        for (const auto& rec : data) bintree.insert(rec);
+        double bintree_time = measure_search_time(
+            [&]() { return bintree.search(target); }, 3);
         
         // 3. Красно-черное дерево
-        RedBlackTree rbt;
-        for (const auto& rec : data) rbt.insert(rec);
-        double rbt_time = measure_search_time(
-            [&]() { return rbt.search(target); }, 3);
+        RedBlackTree rbtree;
+        for (const auto& rec : data) rbtree.insert(rec);
+        double rbtree_time = measure_search_time(
+            [&]() { return rbtree.search(target); }, 3);
         
         // 4. Хеш-таблица (размер ~2x от данных, но не меньше 10007)
         size_t table_size = std::max(size_t(10007), size * 2);
@@ -96,8 +99,8 @@ int main() {
         
         results << size << ","
                 << linear_time << ","
-                << bst_time << ","
-                << rbt_time << ","
+                << bintree_time << ","
+                << rbtree_time << ","
                 << hash_time << ","
                 << multimap_time << ","
                 << collision_rate << "\n";
@@ -105,8 +108,8 @@ int main() {
         collisions_file << size << "," << collision_rate << "\n";
         
         std::cout << "Linear:     " << linear_time << " ms" << std::endl;
-        std::cout << "BST:        " << bst_time << " ms" << std::endl;
-        std::cout << "RBT:        " << rbt_time << " ms" << std::endl;
+        std::cout << "BinTree:        " << bintree_time << " ms" << std::endl;
+        std::cout << "RBTree:        " << rbtree_time << " ms" << std::endl;
         std::cout << "Hash:       " << hash_time << " ms" << std::endl;
         std::cout << "multimap:   " << multimap_time << " ms" << std::endl;
         std::cout << "Collisions: " << collision_rate * 100 << "%" << std::endl;

@@ -7,7 +7,7 @@
 std::vector<ZagsRecord> read_csv(const std::string& filename) {
     std::vector<ZagsRecord> data;
     data.reserve(100000);
-    std::ifstream file(filename);
+    std::ifstream file(filename, std::ios::binary);
     if (!file.is_open()) {
         std::cout << "File not found: " << filename << std::endl;
         return data;

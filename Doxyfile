@@ -1,25 +1,8 @@
-# Основные настройки
-PROJECT_NAME           = "Сортировки ЗАГСа"
-PROJECT_NUMBER         = "1.0"
+PROJECT_NAME           = "Лабораторная работа №2"
 OUTPUT_DIRECTORY       = docs
-EXTRACT_ALL            = YES
-EXTRACT_PRIVATE        = YES
-EXTRACT_STATIC         = YES
-
-# Входные файлы
 INPUT                  = ./
-INPUT_ENCODING         = UTF-8
-FILE_PATTERNS          = *.h *.cpp *.hpp
-RECURSIVE              = YES
-
-# Форматы вывода
+FILE_PATTERNS          = *.h *.cpp *.py
+HAVE_DOT               = NO
+EXTRACT_ALL            = YES
 GENERATE_HTML          = YES
 GENERATE_LATEX         = NO
-
-# Язык
-OUTPUT_LANGUAGE        = Russian
-UTF8_OUTPUT            = YES
-
-# Диаграммы
-HAVE_DOT               = YES
-CLASS_DIAGRAMS         = YES

@@ -1,0 +1,45 @@
+var namespaces_dup =
+[
+    [ "data_generator", "namespacedata__generator.html", [
+      [ "gen_fio", "namespacedata__generator.html#a7220d26fdcfdcc9bf8ad2e15ab5de73b", null ],
+      [ "base", "namespacedata__generator.html#a44a524f0d8eebde247ce6fff8418af67", null ],
+      [ "bride", "namespacedata__generator.html#ad465b855259c67dedb6e0e1d1b2ee81a", null ],
+      [ "bride_birthday", "namespacedata__generator.html#a8a47a3271453926ebb313f4f6b294cce", null ],
+      [ "data_dir", "namespacedata__generator.html#a22dc10f482f36e40c83dc33bb3044d8d", null ],
+      [ "encoding", "namespacedata__generator.html#ad010d4e36c980ae07aadbc797cb385e0", null ],
+      [ "exist_ok", "namespacedata__generator.html#a98cb729cba9d8869ea71f31cc32546bb", null ],
+      [ "female_first", "namespacedata__generator.html#af05c9d4f805a9b774479b13ca1ecfa2f", null ],
+      [ "female_last", "namespacedata__generator.html#aae3895d104e9269be1cf6f19d4a69e8d", null ],
+      [ "female_middle", "namespacedata__generator.html#a77b970299efb0e28dbc75fdcf5bdb8fd", null ],
+      [ "groom", "namespacedata__generator.html#aa28a37ed3e572aff68ee23934b1bed7a", null ],
+      [ "groom_birthday", "namespacedata__generator.html#a6f2409ad6859a39e3c7f26a0c81f7f4f", null ],
+      [ "male_first", "namespacedata__generator.html#af4dbf70c80a3de563d9d3c126d0b5734", null ],
+      [ "male_last", "namespacedata__generator.html#a1f4c7540bc05254ea15365334d5d2736", null ],
+      [ "male_middle", "namespacedata__generator.html#a66a6e26b20c3c5856be4cee397e6a222", null ],
+      [ "newline", "namespacedata__generator.html#ae17a70c199f9d8a665aef0ceefb163da", null ],
+      [ "sizes", "namespacedata__generator.html#a53e11a3e0e31bf8123718a0fb1b62610", null ],
+      [ "wedding_day", "namespacedata__generator.html#a1282a7d11533506c7a8da99f71f01a32", null ],
+      [ "writer", "namespacedata__generator.html#abc85db4dcc38c6905e8486eb21cf5a36", null ],
+      [ "zags", "namespacedata__generator.html#ad5c3415af0a4f95c8fbe269e87a04f6e", null ]
+    ] ],
+    [ "plots", "namespaceplots.html", [
+      [ "alpha", "namespaceplots.html#a5fa87ab2683eff166531c5fd71bd6236", null ],
+      [ "bbox_inches", "namespaceplots.html#a7c8c3c4326c849dadb9bcc40dafe7ec1", null ],
+      [ "color", "namespaceplots.html#a4616cffcf8b4f24305d857fc89d67b68", null ],
+      [ "df", "namespaceplots.html#a7955b7ad86c24d8ea47525913ff76ebe", null ],
+      [ "dpi", "namespaceplots.html#a7ac660136474c33be72e89a8741e5f37", null ],
+      [ "figsize", "namespaceplots.html#a78c69f01070299d3d35db51ddc065f8b", null ],
+      [ "fontsize", "namespaceplots.html#a5ba40f691dec848d5e43d876c1fd200c", null ],
+      [ "fontweight", "namespaceplots.html#a034b00785a1815d2d6c9cd3820ed1549", null ],
+      [ "label", "namespaceplots.html#a45076d300d6057c2f0f4378f517113a0", null ],
+      [ "linestyle", "namespaceplots.html#aa45a9fe76ed6dd484bdb03426ca093c5", null ],
+      [ "linewidth", "namespaceplots.html#a598e0d0b414f5f748f381197bee2c5fb", null ],
+      [ "loc", "namespaceplots.html#a3a9a899e4b18773c5cc53525c500f325", null ],
+      [ "marker", "namespaceplots.html#aa18fac077e922d3c94629330ba0fb90b", null ],
+      [ "markersize", "namespaceplots.html#a0ae5e497168e06b01ed3384a96f2998c", null ],
+      [ "mean_val", "namespaceplots.html#ab42db8df8a12755c0e1209f1c458ce5f", null ],
+      [ "name", "namespaceplots.html#aa848aaab1597f8008906a250abb8f917", null ],
+      [ "std_val", "namespaceplots.html#a66141886a9012948dabd91eda291f431", null ],
+      [ "True", "namespaceplots.html#a337f4fdb789fd564530645a836c23a13", null ]
+    ] ]
+];

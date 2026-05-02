@@ -5,6 +5,7 @@
 #include <iostream>
 #include <functional>
 
+
 // ==================== Линейный поиск ====================
 std::vector<ZagsRecord> linear_search(const std::vector<ZagsRecord>& data, const std::string& target) {
     std::vector<ZagsRecord> result;
@@ -16,10 +17,10 @@ std::vector<ZagsRecord> linear_search(const std::vector<ZagsRecord>& data, const
     return result;
 }
 
-// ==================== BST ====================
-void BST::insert(std::unique_ptr<BSTNode>& node, const ZagsRecord& rec) {
+// ==================== BinTree ====================
+void BinTree::insert(BinTreeNode*& node, const ZagsRecord& rec) {
     if (!node) {
-        node = std::make_unique<BSTNode>(rec);
+        node = new BinTreeNode(rec);
         return;
     }
     
@@ -30,113 +31,104 @@ void BST::insert(std::unique_ptr<BSTNode>& node, const ZagsRecord& rec) {
     }
 }
 
-void BST::insert(const ZagsRecord& rec) {
+void BinTree::insert(const ZagsRecord& rec) {
     insert(root, rec);
 }
 
-void BST::search_all(BSTNode* node, const std::string& target, std::vector<ZagsRecord>& result) const {
+void BinTree::search_all(BinTreeNode* node, const std::string& target, std::vector<ZagsRecord>& result) const {
     if (!node) return;
     
-    if (target < node->record.groom_fio) {
-        search_all(node->left.get(), target, result);
-    } else if (node->record.groom_fio < target) {
-        search_all(node->right.get(), target, result);
-    } else {
-        // Нашли узел с нужным ФИО — нужно собрать все равные
+    // Проверяем текущий узел
+    if (node->record.groom_fio == target) {
         result.push_back(node->record);
-        
-        // Ищем в левом поддереве (могут быть равные)
-        BSTNode* curr = node->left.get();
-        while (curr) {
-            if (curr->record.groom_fio == target) {
-                result.push_back(curr->record);
-                curr = curr->right.get();
-            } else {
-                curr = curr->right.get();
-            }
-        }
-        
-        // Ищем в правом поддереве
-        curr = node->right.get();
-        while (curr) {
-            if (curr->record.groom_fio == target) {
-                result.push_back(curr->record);
-                curr = curr->left.get();
-            } else {
-                curr = curr->left.get();
-            }
-        }
+    }
+    
+    // Ищем в левом поддереве
+    if (target <= node->record.groom_fio) {
+        search_all(node->left, target, result);
+    }
+    
+    // Ищем в правом поддереве
+    if (target >= node->record.groom_fio) {
+        search_all(node->right, target, result);
     }
 }
 
-std::vector<ZagsRecord> BST::search(const std::string& target) const {
+std::vector<ZagsRecord> BinTree::search(const std::string& target) const {
     std::vector<ZagsRecord> result;
-    search_all(root.get(), target, result);
+    search_all(root, target, result);
     return result;
 }
 
-size_t BST::size() const {
+void BinTree::clear(BinTreeNode* node) {
+    if (!node) return;
+    clear(node->left);
+    clear(node->right);
+    delete node;
+}
+
+size_t BinTree::size() const {
     size_t count = 0;
-    std::stack<BSTNode*> stack;
-    if (root) stack.push(root.get());
+    std::stack<BinTreeNode*> stack;
+    if (root) stack.push(root);
     while (!stack.empty()) {
-        BSTNode* node = stack.top();
+        BinTreeNode* node = stack.top();
         stack.pop();
         count++;
-        if (node->left) stack.push(node->left.get());
-        if (node->right) stack.push(node->right.get());
+        if (node->left) stack.push(node->left);
+        if (node->right) stack.push(node->right);
     }
     return count;
 }
 
 // ==================== Красно-черное дерево ====================
-void RedBlackTree::rotate_left(RBTNode* x) {
+void RedBlackTree::rotate_left(RBTreeNode* x) {
     if (!x || !x->right) return;
-    RBTNode* y = x->right.get();
-    x->right = std::move(y->left);
+    RBTreeNode* y = x->right;
+    x->right = y->left;
     if (x->right) x->right->parent = x;
     y->parent = x->parent;
     
     if (!x->parent) {
-        root.reset(y);
-    } else if (x == x->parent->left.get()) {
-        x->parent->left.reset(y);
+        root = y;
+    } else if (x == x->parent->left) {
+        x->parent->left = y;
     } else {
-        x->parent->right.reset(y);
+        x->parent->right = y;
     }
-    y->left.reset(x);
+    y->left = x;
     x->parent = y;
 }
 
-void RedBlackTree::rotate_right(RBTNode* y) {
+void RedBlackTree::rotate_right(RBTreeNode* y) {
     if (!y || !y->left) return;
-    RBTNode* x = y->left.get();
-    y->left = std::move(x->right);
+    RBTreeNode* x = y->left;
+    y->left = x->right;
     if (y->left) y->left->parent = y;
     x->parent = y->parent;
     
     if (!y->parent) {
-        root.reset(x);
-    } else if (y == y->parent->left.get()) {
-        y->parent->left.reset(x);
+        root = x;
+    } else if (y == y->parent->left) {
+        y->parent->left = x;
     } else {
-        y->parent->right.reset(x);
+        y->parent->right = x;
     }
-    x->right.reset(y);
+    x->right = y;
     y->parent = x;
 }
 
-void RedBlackTree::fix_insert(RBTNode* z) {
-    while (z != root.get() && z->parent->color == Color::RED) {
-        if (z->parent == z->parent->parent->left.get()) {
-            RBTNode* y = z->parent->parent->right.get();
+void RedBlackTree::fix_insert(RBTreeNode* z) {
+    while (z != root && z->parent->color == Color::RED) {
+        if (z->parent == z->parent->parent->left) {
+            RBTreeNode* y = z->parent->parent->right;
             if (y && y->color == Color::RED) {
                 z->parent->color = Color::BLACK;
                 y->color = Color::BLACK;
                 z->parent->parent->color = Color::RED;
                 z = z->parent->parent;
             } else {
-                if (z == z->parent->right.get()) {
+                if (z == z->parent->right) {
                     z = z->parent;
                     rotate_left(z);
                 }
@@ -145,14 +137,14 @@ void RedBlackTree::fix_insert(RBTNode* z) {
                 rotate_right(z->parent->parent);
             }
         } else {
-            RBTNode* y = z->parent->parent->left.get();
+            RBTreeNode* y = z->parent->parent->left;
             if (y && y->color == Color::RED) {
                 z->parent->color = Color::BLACK;
                 y->color = Color::BLACK;
                 z->parent->parent->color = Color::RED;
                 z = z->parent->parent;
             } else {
-                if (z == z->parent->left.get()) {
+                if (z == z->parent->left) {
                     z = z->parent;
                     rotate_right(z);
                 }
@@ -166,89 +158,85 @@ void RedBlackTree::fix_insert(RBTNode* z) {
 }
 
 void RedBlackTree::insert(const ZagsRecord& rec) {
-    RBTNode* z = new RBTNode(rec);
-    RBTNode* y = nullptr;
-    RBTNode* x = root.get();
+    RBTreeNode* z = new RBTreeNode(rec);
+    RBTreeNode* y = nullptr;
+    RBTreeNode* x = root;
     
     while (x) {
         y = x;
         if (rec.groom_fio < x->record.groom_fio) {
-            x = x->left.get();
+            x = x->left;
         } else {
-            x = x->right.get();
+            x = x->right;
         }
     }
     
     z->parent = y;
     if (!y) {
-        root.reset(z);
+        root = z;
     } else if (rec.groom_fio < y->record.groom_fio) {
-        y->left.reset(z);
+        y->left = z;
     } else {
-        y->right.reset(z);
+        y->right = z;
     }
     
     fix_insert(z);
 }
 
-void RedBlackTree::search_all(RBTNode* node, const std::string& target, std::vector<ZagsRecord>& result) const {
+void RedBlackTree::search_all(RBTreeNode* node, const std::string& target, std::vector<ZagsRecord>& result) const {
     if (!node) return;
     
-    if (target < node->record.groom_fio) {
-        search_all(node->left.get(), target, result);
-    } else if (node->record.groom_fio < target) {
-        search_all(node->right.get(), target, result);
-    } else {
+    // Проверяем текущий узел
+    if (node->record.groom_fio == target) {
         result.push_back(node->record);
-        
-        // Поиск равных в левом поддереве
-        RBTNode* curr = node->left.get();
-        while (curr && curr->record.groom_fio == target) {
-            result.push_back(curr->record);
-            curr = curr->right.get();
-        }
-        
-        // Поиск равных в правом поддереве
-        curr = node->right.get();
-        while (curr && curr->record.groom_fio == target) {
-            result.push_back(curr->record);
-            curr = curr->left.get();
-        }
+    }
+    
+    // Ищем в левом поддереве
+    if (target <= node->record.groom_fio) {
+        search_all(node->left, target, result);
+    }
+    
+    // Ищем в правом поддереве
+    if (target >= node->record.groom_fio) {
+        search_all(node->right, target, result);
     }
 }
 
 std::vector<ZagsRecord> RedBlackTree::search(const std::string& target) const {
     std::vector<ZagsRecord> result;
-    search_all(root.get(), target, result);
+    search_all(root, target, result);
     return result;
+}
+
+void RedBlackTree::clear(RBTreeNode* node) {
+    if (!node) return;
+    clear(node->left);
+    clear(node->right);
+    delete node;
 }
 
 size_t RedBlackTree::size() const {
     size_t count = 0;
-    std::stack<RBTNode*> stack;
-    if (root) stack.push(root.get());
+    std::stack<RBTreeNode*> stack;
+    if (root) stack.push(root);
     while (!stack.empty()) {
-        RBTNode* node = stack.top();
+        RBTreeNode* node = stack.top();
         stack.pop();
         count++;
-        if (node->left) stack.push(node->left.get());
-        if (node->right) stack.push(node->right.get());
+        if (node->left) stack.push(node->left);
+        if (node->right) stack.push(node->right);
     }
     return count;
 }
 
 // ==================== Хеш-таблица ====================
 size_t hash_string(const std::string& key, size_t table_size) {
-    // Полиномиальный хеш (эффективен для строк)
-    size_t hash = 0;
-    const size_t p = 31; // простое число
-    size_t p_pow = 1;
-    
+    unsigned int hash = 0;
     for (char c : key) {
-        hash = (hash + (c * p_pow) % table_size) % table_size;
-        p_pow = (p_pow * p) % table_size;
+        hash += (unsigned char)(c);
+        hash -= (hash << 13) | (hash >> 19);
     }
-    return hash;
+    return hash % table_size;
 }
 
 HashTable::HashTable(size_t size) : table(size), collision_count(0), total_inserts(0) {}
