@@ -11,8 +11,6 @@
 #include <vector>
 #include <map>
 #include <chrono>
-#include <random>
-#include <set>
 
 
 template<typename Func>
@@ -24,7 +22,7 @@ double measure_search_time(Func search_func, int repeats = 5) {
         auto end = std::chrono::high_resolution_clock::now();
         total += std::chrono::duration<double, std::milli>(end - start).count();
 
-        volatile auto dummy = result.size();
+        auto dummy = result.size();
         (void)dummy;
     }
     return total / repeats;
@@ -41,8 +39,6 @@ int main() {
     std::ofstream collisions_file("collisions.csv");
     collisions_file << "size,collision_rate\n";
     
-    std::random_device rd;
-    std::mt19937 gen(rd());
     
     for (size_t size : sizes) {
         std::string filename = "data/zags_" + std::to_string(size) + ".csv";
@@ -55,8 +51,7 @@ int main() {
         }
         
         // Выбираем случайное ФИО из данных для поиска (которое точно существует)
-        std::uniform_int_distribution<size_t> dist(0, data.size() - 1);
-        std::string target = data[dist(gen)].groom_fio;
+        std::string target = data[data.size() / 2].groom_fio;
         
         std::cout << "Searching for: " << target << std::endl;
         
@@ -108,10 +103,10 @@ int main() {
         collisions_file << size << "," << collision_rate << "\n";
         
         std::cout << "Linear:     " << linear_time << " ms" << std::endl;
-        std::cout << "BinTree:        " << bintree_time << " ms" << std::endl;
-        std::cout << "RBTree:        " << rbtree_time << " ms" << std::endl;
+        std::cout << "BinTree:    " << bintree_time << " ms" << std::endl;
+        std::cout << "RBTree:     " << rbtree_time << " ms" << std::endl;
         std::cout << "Hash:       " << hash_time << " ms" << std::endl;
-        std::cout << "multimap:   " << multimap_time << " ms" << std::endl;
+        std::cout << "Multimap:   " << multimap_time << " ms" << std::endl;
         std::cout << "Collisions: " << collision_rate * 100 << "%" << std::endl;
     }
     

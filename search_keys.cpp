@@ -1,15 +1,12 @@
 #include "search_keys.h"
-#include <algorithm>
-#include <queue>
 #include <stack>
 #include <iostream>
-#include <functional>
 
 
-// ==================== Линейный поиск ====================
+// Линейный поиск
 std::vector<ZagsRecord> linear_search(const std::vector<ZagsRecord>& data, const std::string& target) {
     std::vector<ZagsRecord> result;
-    for (const auto& rec : data) {
+    for (const ZagsRecord& rec : data) {
         if (rec.groom_fio == target) {
             result.push_back(rec);
         }
@@ -17,7 +14,7 @@ std::vector<ZagsRecord> linear_search(const std::vector<ZagsRecord>& data, const
     return result;
 }
 
-// ==================== BinTree ====================
+// BinTree
 void BinTree::insert(BinTreeNode*& node, const ZagsRecord& rec) {
     if (!node) {
         node = new BinTreeNode(rec);
@@ -44,7 +41,7 @@ void BinTree::search_all(BinTreeNode* node, const std::string& target, std::vect
     }
     
     // Ищем в левом поддереве
-    if (target <= node->record.groom_fio) {
+    if (target < node->record.groom_fio) {
         search_all(node->left, target, result);
     }
     
@@ -81,7 +78,7 @@ size_t BinTree::size() const {
     return count;
 }
 
-// ==================== Красно-черное дерево ====================
+// Красно-черное дерево
 void RedBlackTree::rotate_left(RBTreeNode* x) {
     if (!x || !x->right) return;
     RBTreeNode* y = x->right;
@@ -192,7 +189,7 @@ void RedBlackTree::search_all(RBTreeNode* node, const std::string& target, std::
     }
     
     // Ищем в левом поддереве
-    if (target <= node->record.groom_fio) {
+    if (target < node->record.groom_fio) {
         search_all(node->left, target, result);
     }
     
@@ -229,7 +226,7 @@ size_t RedBlackTree::size() const {
     return count;
 }
 
-// ==================== Хеш-таблица ====================
+// Хеш-таблица
 size_t hash_string(const std::string& key, size_t table_size) {
     unsigned int hash = 0;
     for (char c : key) {
@@ -253,7 +250,7 @@ void HashTable::insert(const ZagsRecord& rec) {
 std::vector<ZagsRecord> HashTable::search(const std::string& target) const {
     size_t idx = hash_string(target, table.size());
     std::vector<ZagsRecord> result;
-    for (const auto& rec : table[idx]) {
+    for (const ZagsRecord& rec : table[idx]) {
         if (rec.groom_fio == target) {
             result.push_back(rec);
         }

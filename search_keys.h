@@ -13,7 +13,7 @@
 #include <map>
 #include <memory>
 
-// ==================== Линейный поиск ====================
+// Линейный поиск
 /**
  * @brief Линейный поиск всех записей с заданным ФИО жениха
  * @param data Массив записей
@@ -22,7 +22,7 @@
  */
 std::vector<ZagsRecord> linear_search(const std::vector<ZagsRecord>& data, const std::string& target);
 
-// ==================== BinTree (бинарное дерево поиска) ====================
+// BinTree (бинарное дерево поиска)
 struct BinTreeNode {
     ZagsRecord record;
     BinTreeNode* left;
@@ -49,7 +49,7 @@ public:
     size_t size() const;
 };
 
-// ==================== Красно-черное дерево ====================
+// Красно-черное дерево
 enum class Color { RED, BLACK };
 
 struct RBTreeNode {
@@ -84,7 +84,7 @@ public:
     size_t size() const;
 };
 
-// ==================== Хеш-таблица ====================
+// Хеш-таблица
 /**
  * @brief Хеш-функция для строки (ФИО)
  * @param key Строка ключа
